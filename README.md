@@ -17,3 +17,6 @@ pixels and 16 KiB to `trafficlight/gif/set` as raw bytes or base64 text.
 
 See [MQTT setup](MQTT_SETUP.md) for Home Assistant and GIF examples, and
 [upload instructions](UPLOAD_INSTRUCTIONS.md) for troubleshooting.
+
+Install the [MylesDisplay dashboard card](home-assistant/README.md) to choose
+and preview a GIF before sending it, advance modes, or stop playback.
