@@ -1,0 +1,19 @@
+# Local credentials and device settings
+/tl_secrets.py
+/config.py
+/timezone.cfg
+.env
+
+# Local builds, editor settings and experiments
+__pycache__/
+*.py[cod]
+/build/
+/.vscode/
+/scratch/
+/asyn.py
+/main_2.py
+/mqtt_as.py
+/trafficlight.py
+/umqtt/
+/nancat.gif
+/a 64x32 pixel traffi.png

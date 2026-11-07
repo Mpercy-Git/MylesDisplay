@@ -1,0 +1,114 @@
+# Home Assistant Configuration for Traffic Light Display
+
+## AUTOMATIC DISCOVERY - NO CONFIGURATION NEEDED! ##
+
+The traffic light now uses MQTT auto-discovery. Once the device connects to MQTT,
+it will automatically appear in Home Assistant under:
+  Settings > Devices & Services > MQTT > Traffic Light Display
+
+All sensors and buttons will be created automatically.
+
+---
+
+## Manual Configuration (OPTIONAL - Only if auto-discovery is disabled)
+
+If you have MQTT discovery disabled in Home Assistant, you can manually add this
+configuration to your configuration.yaml:
+
+mqtt:
+  sensor:
+    - name: "Traffic Light Mode"
+      unique_id: "trafficlight_mode_sensor"
+      state_topic: "trafficlight/state"
+      icon: mdi:traffic-light
+      
+    - name: "Traffic Light Color"
+      unique_id: "trafficlight_color_sensor"
+      state_topic: "trafficlight/light"
+      icon: mdi:lightbulb
+
+  button:
+    - name: "Traffic Light - Red"
+      unique_id: "trafficlight_red"
+      command_topic: "trafficlight/command"
+      payload_press: "red"
+      icon: mdi:circle
+      entity_category: config
+
+    - name: "Traffic Light - Yellow"
+      unique_id: "trafficlight_yellow"
+      command_topic: "trafficlight/command"
+      payload_press: "yellow"
+      icon: mdi:circle
+      entity_category: config
+
+    - name: "Traffic Light - Green"
+      unique_id: "trafficlight_green"
+      command_topic: "trafficlight/command"
+      payload_press: "green"
+      icon: mdi:circle
+      entity_category: config
+      
+    - name: "Traffic Light - Auto"
+      unique_id: "trafficlight_auto"
+      command_topic: "trafficlight/command"
+      payload_press: "traffic"
+      icon: mdi:traffic-light
+
+    - name: "Traffic Light - Clock"
+      unique_id: "trafficlight_clock"
+      command_topic: "trafficlight/command"
+      payload_press: "clock"
+      icon: mdi:clock-outline
+
+    - name: "Traffic Light Toggle"
+      unique_id: "trafficlight_toggle"
+      command_topic: "trafficlight/command"
+      payload_press: "toggle"
+      icon: mdi:swap-horizontal
+
+# Optional: Create automation examples
+automation:
+  - alias: "Traffic Light - Auto Mode at Morning"
+    trigger:
+      - platform: time
+        at: "07:00:00"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "trafficlight/command"
+          payload: "traffic"
+
+  - alias: "Traffic Light - Clock at Night"
+    trigger:
+      - platform: time
+        at: "22:00:00"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "trafficlight/command"
+          payload: "clock"
+
+  # Example: Show red when alarm is armed
+  - alias: "Traffic Light - Red When Armed"
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home_alarm
+        to: "armed_away"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "trafficlight/command"
+          payload: "red"
+
+  # Example: Show green when someone arrives home
+  - alias: "Traffic Light - Green When Home"
+    trigger:
+      - platform: state
+        entity_id: person.username
+        to: "home"
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "trafficlight/command"
+          payload: "green"
